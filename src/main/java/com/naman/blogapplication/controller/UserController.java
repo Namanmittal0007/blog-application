@@ -1,6 +1,7 @@
 package com.naman.blogapplication.controller;
 
-import com.naman.blogapplication.entity.Users;
+import com.naman.blogapplication.dto.UserDto;
+import com.naman.blogapplication.entity.User;
 import com.naman.blogapplication.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,24 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    private final UsersService usersService;
+
     @Autowired
-    private UsersService usersService;
+    public UserController(final UsersService usersService) {
+        this.usersService = usersService;
+    }
 
-//    @Autowired
-//    public UserController(final UsersService usersService) {
-//        this.usersService = usersService;
-//    }
-
-    @PostMapping("/")
-    public ResponseEntity<String> createUser(@RequestBody Users user){
-        try{
-            usersService.createUser(user);
-            return new ResponseEntity<>("",HttpStatus.OK);
-        }
-        catch (Exception e){
-//            System.out.print(ExceptionUtils.getStackTrace(e));
-            e.printStackTrace();
-            return new ResponseEntity<>("",HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/create")
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+        ResponseEntity<UserDto> response;
+        UserDto responseUserDto= usersService.createUser(userDto);
+        response = new ResponseEntity<>(responseUserDto,HttpStatus.OK);
+        return response;
     }
 }

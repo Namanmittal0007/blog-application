@@ -1,71 +1,72 @@
 package com.naman.blogapplication.services.impl;
 
-import com.naman.blogapplication.dto.UsersDto;
-import com.naman.blogapplication.entity.Users;
+import com.naman.blogapplication.dto.UserDto;
+import com.naman.blogapplication.entity.User;
 import com.naman.blogapplication.repository.UsersRepo;
 import com.naman.blogapplication.services.UsersService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.apache.commons.lang3.exception.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
-@NoArgsConstructor
-@Data
 public class UsersServiceImpl implements UsersService {
 
-    private UsersRepo usersRepo;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    public UsersServiceImpl(final UsersRepo usersRepo){
-        this.usersRepo=usersRepo;
+    public UsersServiceImpl(final UsersRepo usersRepo) {
+        this.usersRepo = usersRepo;
     }
 
     @Override
-    public Users createUser(Users user) {
-        System.out.println(user.toString());
-        if(!Objects.isNull(usersRepo)){
-            System.out.println(usersRepo.hashCode());
-        }
-        else {
-            System.out.println("Object null");
-        }
-        try{
-            return usersRepo.save(user);
-        }
-        catch (Throwable e){
-            e.printStackTrace();
-        }
+    public UserDto createUser(UserDto userDto) {
+        User user = userDtoToUser(userDto);
+        User savedUser = this.usersRepo.save(user);
+        return userToUserDto(savedUser);
+    }
+
+    @Override
+    public UserDto updateUser(User user, Integer id) {
         return null;
     }
 
-//    @Override
-//    public UsersDto updateUser(Users user, Integer id) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void deleteUserById(Integer id) {
-//
-//    }
-//
-//    @Override
-//    public void deleteAllUser() {
-//
-//    }
-//
-//    @Override
-//    public UsersDto getUserById(Integer id) {
-//        return null;
-//    }
-//
-//    @Override
-//    public List<UsersDto> getAllUser() {
-//        return null;
-//    }
+    @Override
+    public void deleteUserById(Integer id) {
+
+    }
+
+    @Override
+    public void deleteAllUser() {
+
+    }
+
+    @Override
+    public UserDto getUserById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<UserDto> getAllUser() {
+        return null;
+    }
+
+    private User userDtoToUser(UserDto userDto){
+        User user = new User();
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPass(userDto.getPass());
+        user.setAbout(userDto.getAbout());
+        return  user;
+    }
+
+    private UserDto userToUserDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPass(user.getPass());
+        userDto.setAbout(user.getAbout());
+        return userDto;
+    }
 }

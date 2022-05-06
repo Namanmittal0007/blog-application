@@ -7,10 +7,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UsersDto {
+public class UserDto {
+
     private Integer id;
     private String name;
     private String email;
     private String pass;
     private String about;
+
 }
